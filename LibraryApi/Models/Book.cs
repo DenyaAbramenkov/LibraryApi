@@ -1,28 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace LibraryApi.Models
+﻿namespace LibraryApi.Models
 {
+    using System.ComponentModel.DataAnnotations;
+
+    /// <summary>
+    /// Model of Book for Library service
+    /// </summary>
     public class Book
     {
-        private static int counterForId;
+        /// <summary>
+        /// Private counter for getting new Id of author
+        /// </summary>
+        private static int _counterForId = 0;
 
-        public Book(string name, string author, int year)
+        /// <summary>
+        /// Constructor for Book
+        /// </summary>
+        /// <param name="name">Name of Book</param>
+        /// <param name="year">Year of publishing</param>
+        /// <param name="authorId">Author's id, who wrote book</param>
+        public Book(string name, int year, int? authorId = null)
         {
             Name = name;
-            Author = author;
+            AuthorId = authorId;
             Year = year;
-            Id = ++counterForId;
+            Id = ++_counterForId;
         }
 
-        public int Id;
+        /// <summary>
+        /// Gets the Book's Id
+        /// </summary> 
+        public int Id { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the Book's Name
+        /// </summary>
+        [Required(ErrorMessage = "Book's Name is required")]
         public string Name { get; set; }
 
-        public string Author { get; set; }
+        /// <summary>
+        /// Gets or sets the Book's AuthorId(Can be null)
+        /// </summary>
+        public int? AuthorId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Book's Year of publishing
+        /// </summary>
+        [Range (1500, 2018, ErrorMessage = "Book can't be published in that year!")]
         public int Year { get; set; }    
     }
 }

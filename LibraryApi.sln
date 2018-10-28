@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryApi", "LibraryApi\LibraryApi.csproj", "{B796AF0F-4D71-4BCB-8C64-B2DA347480DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryApi", "LibraryApi\LibraryApi.csproj", "{B796AF0F-4D71-4BCB-8C64-B2DA347480DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryServiceTest", "LibraryServiceTest\LibraryServiceTest.csproj", "{588F9920-6F88-45DF-81FB-040CBB166595}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B796AF0F-4D71-4BCB-8C64-B2DA347480DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B796AF0F-4D71-4BCB-8C64-B2DA347480DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B796AF0F-4D71-4BCB-8C64-B2DA347480DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{588F9920-6F88-45DF-81FB-040CBB166595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{588F9920-6F88-45DF-81FB-040CBB166595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{588F9920-6F88-45DF-81FB-040CBB166595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{588F9920-6F88-45DF-81FB-040CBB166595}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

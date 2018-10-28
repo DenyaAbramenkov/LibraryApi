@@ -1,16 +1,16 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using LibraryApi.Services;
 using LibraryApi.Models;
+using LibraryApi.Services;
 
 namespace LibraryApi.Controllers
 {
-    [Route("api/books")]
+    [Route("api/authors")]
     [ApiController]
-    public class BooksController : ControllerBase
+    public class AuthorsController : ControllerBase
     {
         /// <summary>
-        /// Library Service
+        /// Library Sercice
         /// </summary>
         private readonly ILibrary _library;
 
@@ -18,31 +18,31 @@ namespace LibraryApi.Controllers
         /// Service Initialize
         /// </summary>
         /// <param name="library">Library</param>
-        public BooksController(ILibrary library)
+        public AuthorsController(ILibrary library)
         {
             _library = library;
         }
 
         /// <summary>
-        /// Get all Books
+        /// Get all Author's
         /// </summary>
         /// <returns>Result of Http request</returns>
         [HttpGet]
-        public IActionResult GetBooks()
+        public IActionResult GetAuthors()
         {
-            _library.GetAllBook();
+            _library.GetAllAuthors();
             return Ok();
         }
 
         /// <summary>
-        /// Get Book by Id
+        /// Get Author by Id
         /// </summary>
-        /// <param name="id">Book's Id</param>
+        /// <param name="id">Author's Id</param>
         /// <returns>Result of Http request</returns>
-        [HttpGet("{id}", Name = "GetBook")]
-        public IActionResult GetBook(int id)
+        [HttpGet("{id}", Name = "GetAuthor")]
+        public IActionResult GetAuthor(int id)
         {
-            var item = _library.GetAllBook().ToList().Find((book) => book.Id == id); 
+            var item = _library.GetAllAuthors().ToList().Find((Author) => Author.Id == id);
             if (item == null)
             {
                 return NotFound();
@@ -51,49 +51,49 @@ namespace LibraryApi.Controllers
         }
 
         /// <summary>
-        /// Create New Book
+        /// Create new Author
         /// </summary>
-        /// <param name="book">Book to create</param>
+        /// <param name="author">Author to create</param>
         /// <returns>Result of Http request</returns>
         [HttpPost]
-        public IActionResult CreateBook(Book book)
+        public IActionResult CreateAuthor(Author author)
         {
-            _library.CreateBook(book);
-            return Created("books", book);
+            _library.CreateAuthor(author);
+            return Created("authors", author);
         }
 
         /// <summary>
-        /// Update Book
+        /// Update Author
         /// </summary>
-        /// <param name="id">Book's Id to update</param>
-        /// <param name="book">New Info</param>
+        /// <param name="id">Author to update</param>
+        /// <param name="author">New Info</param>
         /// <returns>Result of Http request</returns>
         [HttpPut]
-        public IActionResult UpdateBook(int id, Book book)
+        public IActionResult UpdateAuthor(int id, Author author)
         {
-            var item = _library.GetBook(id);
+            var item = _library.GetAuthor(id);
             if (item == null)
             {
                 return NotFound();
             }
-            _library.UpdateBook(id, book);
+            _library.UpdateAuthor(id, author);
             return Ok();
         }
 
         /// <summary>
-        /// Delete Book
+        /// Delete Author
         /// </summary>
-        /// <param name="id">Book's Id to delete</param>
+        /// <param name="id">Author's Id</param>
         /// <returns>Result of Http request</returns>
         [HttpDelete]
-        public IActionResult DeleteBook(int id)
+        public IActionResult DeleteAuthor(int id)
         {
-            var item = _library.GetBook(id);
+            var item = _library.GetAuthor(id);
             if (item == null)
             {
                 return NotFound();
             }
-            _library.DeleteBook(id);
+            _library.DeleteAuthor(id);
             return Ok();
         }
     }
