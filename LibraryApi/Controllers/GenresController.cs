@@ -6,12 +6,12 @@ using System.Collections.Generic;
 
 namespace LibraryApi.Controllers
 {
-    [Route("api/authors")]
+    [Route("api/genres")]
     [ApiController]
-    public class AuthorsController : ControllerBase
+    public class GenresController : ControllerBase
     {
         /// <summary>
-        /// Library Sercice
+        /// Library Service
         /// </summary>
         private readonly ILibrary _library;
 
@@ -19,36 +19,36 @@ namespace LibraryApi.Controllers
         /// Service Initialize
         /// </summary>
         /// <param name="library">Library</param>
-        public AuthorsController(ILibrary library)
+        public GenresController(ILibrary library)
         {
             _library = library;
         }
 
         /// <summary>
-        /// Get all Author's
+        /// Get all Genres
         /// </summary>
         /// <returns>Result of Http request</returns>
         [HttpGet]
-        public IActionResult GetAuthors()
+        public IActionResult GetGenres()
         {
-            List<Author> authorlist = _library.GetAllAuthors().ToList();
-            if (authorlist.Count == 0)
+            List<Genre> genrelist = _library.GetAllGenres().ToList();
+            if (genrelist.Count == 0)
             {
                 return NotFound("Any book are not recorded!");
             }
 
-            return Ok(authorlist);
+            return Ok(genrelist);
         }
 
         /// <summary>
-        /// Get Author by Id
+        /// Get Genre by Id
         /// </summary>
-        /// <param name="id">Author's Id</param>
+        /// <param name="id">Genre's Id</param>
         /// <returns>Result of Http request</returns>
-        [HttpGet("{id}", Name = "GetAuthor")]
-        public IActionResult GetAuthor(int id)
+        [HttpGet("{id}", Name = "GetGenre")]
+        public IActionResult GetGenre(int id)
         {
-            var item = _library.GetAllAuthors().ToList().Find((Author) => Author.Id == id);
+            var item = _library.GetAllGenres().ToList().Find((Genre) => Genre.Id == id);
             if (item == null)
             {
                 return NotFound();
@@ -57,65 +57,66 @@ namespace LibraryApi.Controllers
         }
 
         /// <summary>
-        /// Create new Author
+        /// Create New Genre
         /// </summary>
-        /// <param name="author">Author to create</param>
+        /// <param name="genre">Genre to create</param>
         /// <returns>Result of Http request</returns>
         [HttpPost]
-        public IActionResult CreateAuthor(Author author)
+        public IActionResult CreateGenre(Genre genre)
         {
-            _library.CreateAuthor(author);
-            return Created("authors", author);
+            _library.CreateGenre(genre);
+            return Created("genres", genre);
         }
 
         /// <summary>
-        /// Update Author
+        /// Update Genre
         /// </summary>
-        /// <param name="id">Author to update</param>
-        /// <param name="author">New Info</param>
+        /// <param name="id">Genre's Id to update</param>
+        /// <param name="book">New Info</param>
         /// <returns>Result of Http request</returns>
         [HttpPut("{id}")]
-        public IActionResult UpdateAuthor(int id, Author author)
+        public IActionResult UpdateGenre(int id, Genre genre)
         {
-            var item = _library.GetAuthor(id);
+            var item = _library.GetGenre(id);
             if (item == null)
             {
                 return NotFound();
             }
-            _library.UpdateAuthor(id, author);
+            _library.UpdateGenre(id, genre);
             return Ok();
         }
 
         /// <summary>
-        /// Delete Author
+        /// Delete Genre
         /// </summary>
-        /// <param name="id">Author's Id</param>
+        /// <param name="id">Genre's Id to delete</param>
         /// <returns>Result of Http request</returns>
         [HttpDelete("{id}")]
-        public IActionResult DeleteAuthor(int id)
+        public IActionResult DeleteGenre(int id)
         {
-            var item = _library.GetAuthor(id);
+            var item = _library.GetGenre(id);
             if (item == null)
             {
                 return NotFound();
             }
-            _library.DeleteAuthor(id);
+            _library.DeleteGenre(id);
             return Ok();
         }
 
         /// <summary>
-        /// Return all books of this author
+        /// Return all books of this Ganre
         /// </summary>
-        /// <param name="id">Author's Id</param>
+        /// <param name="id">Ganre's Id</param>
         /// <returns>Result of Http request</returns>
         [HttpGet("{id}/books")]
-        public IActionResult GetBooksOfAuthor(int id)
+        public IActionResult GetBooksOfGenre(int id)
         {
-            List<Book> books = _library.GetAuthorBooks(id).ToList();
+            List<Book> books = _library.GetAllGenreBooks(id).ToList();
             if (books.Count == 0)
             {
-                return NotFound("No books was found");
+                return NotFound("There was nothing found");
             }
+
             return Ok(books);
         }
     }

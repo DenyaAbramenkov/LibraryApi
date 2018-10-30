@@ -2,6 +2,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LibraryApi.Models;
 using LibraryApi.Services;
 using System.Collections.Generic;
+using Moq;
+using System.Linq;
 
 namespace LibraryServiceTest
 {
@@ -9,48 +11,55 @@ namespace LibraryServiceTest
     public class BookServiceTest
     {
         /// <summary>
-        /// The library Sercive to test
+        /// Book's collection
         /// </summary>
-        private static ILibrary _library;
+        private readonly List<Book> _booksInLibrary;
 
         /// <summary>
-        /// Initializes the library Service for testing
+        /// Author's collection
         /// </summary>
+        public IEnumerable<Author> _authors;
+
+        /// <summary>
+        /// Genre's collection
+        /// </summary>
+        private readonly List<Genre> _genres;
+
+        /// <summary>
+        /// Genre's collection
+        /// </summary>
+        private readonly List<KeyValuePair<int, int>> _bookAndGenresConnection;
+
+
+        Mock<IDataProvider> mock = new Mock<IDataProvider>();
+        readonly List<Book> books = new List<Book>();
+        private static ILibrary _library;
+        Mock<ILibrary> lib = new Mock<ILibrary>();
+
         [ClassInitialize]
         public static void Initialize(TestContext context)
         {
-            _library = new Library();
+            Mock<IDataProvider> mock = new Mock<IDataProvider>();
+            
+            _library = new Library(mock.Object);
         }
 
-      
+
         [TestMethod]
         public void TestGetAllBook()
         {
-            List<Book> expected = new List<Book> {
-                new Book("The Gratest Book", 2000, 1),
-                new Book("Good Book", 2005, 2),
-                new Book("Book", 2010, 2)
-            };
+            mock.Setup(m => m.SetBooks()).Returns(books);
 
-            List<Book> actual = new List<Book>();
-            foreach(Book book in _library.GetAllBook())
-            {
-                actual.Add(book);
-            }
-
-            CollectionAssert.AreEqual(actual, expected);
+            CollectionAssert.AreEqual(books, _library.GetAllBook().ToList());
         }
-
+        
        
         [TestMethod]
-        [DataRow(1, "The Gratest Book", 2000, 1)]
-        [DataRow(2, "Good Book", 2005, 2)]
-        public void TestGetBook_Correct(int id, string name, int authorId, int year)
+        
+        public void TestGetBook_Correct()
         {
-            Book expected = new Book(name, year, authorId);
-
-            Book actual = _library.GetBook(id);
-
+            Book actual = _library.GetBook(1);
+            Book expected = new Book("The Gratest Book", 2000, 1);
             Assert.AreEqual(actual, expected);
         }
 

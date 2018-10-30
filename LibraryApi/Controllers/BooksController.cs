@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using LibraryApi.Services;
 using LibraryApi.Models;
+using System.Collections.Generic;
 
 namespace LibraryApi.Controllers
 {
@@ -30,8 +31,13 @@ namespace LibraryApi.Controllers
         [HttpGet]
         public IActionResult GetBooks()
         {
-            _library.GetAllBook();
-            return Ok();
+            List<Book> booklist = _library.GetAllBook().ToList();
+            if (booklist.Count == 0)
+            {
+                return NotFound("Any book are not recorded!");
+            }
+
+            return Ok(booklist);
         }
 
         /// <summary>
@@ -42,7 +48,7 @@ namespace LibraryApi.Controllers
         [HttpGet("{id}", Name = "GetBook")]
         public IActionResult GetBook(int id)
         {
-            var item = _library.GetAllBook().ToList().Find((book) => book.Id == id); 
+            var item = _library.GetAllBook().ToList().Find((Book) => Book.Id == id);
             if (item == null)
             {
                 return NotFound();
@@ -68,7 +74,7 @@ namespace LibraryApi.Controllers
         /// <param name="id">Book's Id to update</param>
         /// <param name="book">New Info</param>
         /// <returns>Result of Http request</returns>
-        [HttpPut]
+        [HttpPut("{id}")]
         public IActionResult UpdateBook(int id, Book book)
         {
             var item = _library.GetBook(id);
@@ -85,7 +91,7 @@ namespace LibraryApi.Controllers
         /// </summary>
         /// <param name="id">Book's Id to delete</param>
         /// <returns>Result of Http request</returns>
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteBook(int id)
         {
             var item = _library.GetBook(id);
@@ -96,5 +102,41 @@ namespace LibraryApi.Controllers
             _library.DeleteBook(id);
             return Ok();
         }
+
+        /// <summary>
+        /// Added Author to Book
+        /// </summary>
+        /// <param name="book_id">Book's Id</param>
+        /// <param name="author_id">Author's Id</param>
+        /// <returns>Result of Http request</returns>
+        [HttpPost("{book_id}/authors/{author_id}")]
+        public IActionResult AddAuthorToBook(int bookId, int authorId)
+        {
+            _library.AddAuthorToBook(bookId, authorId);
+            return Ok("Added author to book");
+        }
+
+        [HttpDelete("{book_id}/authors")]
+        public IActionResult RemoveAuthorfromBook(int bookId)
+        {
+            _library.DeleteAutorFromBook(bookId);
+            return Ok("Author was deleted");
+        }
+        /// <summary>
+        /// Adds genre to the book.
+        /// </summary>
+        /// <param name="book_id">The book id.</param>
+        /// <param name="genre_id">The genre id.</param>
+        /// <returns>Result of Http request</returns>
+        [HttpPost("{book_id}/genres/{genre_id}")]
+        public IActionResult AddGenreToBook(int bookId, int genreId)
+        {
+            if (_library.AddGenreToBook(bookId, genreId))
+            {
+                return Ok("Added book genre");
+            }
+            return NotFound("No book or/and genre with such ids found!");
+        }
+
     }
 }
