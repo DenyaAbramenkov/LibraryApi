@@ -177,7 +177,7 @@ namespace LibraryApi.Services
         /// Update Author
         /// </summary>
         /// <param name="id">Author's Id</param>
-        /// <param name="author">New Author's Id</
+        /// <param name="author">New Author</
         public Author UpdateAuthor(int id, Author author)
         {
             Author authorToUpdate = _authors.Find((Author) => Author.Id == id);

@@ -46,5 +46,18 @@
         /// Gets or sets the Author's Year of Birthday
         /// </summary>
         public int YearOfBirthday { get; set; }
+
+        public override bool Equals(object author)
+        {
+            Author newauthor = author as Author;
+            if (this.Name == newauthor.Name
+             && this.Surname == newauthor.Surname
+             && this.YearOfBirthday == newauthor.YearOfBirthday)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

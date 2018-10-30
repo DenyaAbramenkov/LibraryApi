@@ -28,5 +28,16 @@
         /// </summary>
         [Required(ErrorMessage = "Genre's Name is required")]
         public string Name { get; set; }
+
+        public override bool Equals(object genre)
+        {
+            Genre newgenre = genre as Genre;
+            if (this.Name == newgenre.Name)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
