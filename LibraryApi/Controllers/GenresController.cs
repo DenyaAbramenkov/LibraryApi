@@ -6,28 +6,31 @@ using System.Collections.Generic;
 
 namespace LibraryApi.Controllers
 {
+    /// <summary>
+    /// Genre's controller.
+    /// </summary>
     [Route("api/genres")]
     [ApiController]
     public class GenresController : ControllerBase
     {
         /// <summary>
-        /// Library Service
+        /// Library Service.
         /// </summary>
         private readonly ILibrary _library;
 
         /// <summary>
-        /// Service Initialize
+        /// Service Initialize.
         /// </summary>
-        /// <param name="library">Library</param>
+        /// <param name="library">Library.</param>
         public GenresController(ILibrary library)
         {
             _library = library;
         }
 
         /// <summary>
-        /// Get all Genres
+        /// Get all Genres.
         /// </summary>
-        /// <returns>Result of Http request</returns>
+        /// <returns>Result of Http request.</returns>
         [HttpGet]
         public IActionResult GetGenres()
         {
@@ -41,10 +44,10 @@ namespace LibraryApi.Controllers
         }
 
         /// <summary>
-        /// Get Genre by Id
+        /// Get Genre by Id.
         /// </summary>
-        /// <param name="id">Genre's Id</param>
-        /// <returns>Result of Http request</returns>
+        /// <param name="id">Genre's Id.</param>
+        /// <returns>Result of Http request.</returns>
         [HttpGet("{id}", Name = "GetGenre")]
         public IActionResult GetGenre(int id)
         {
@@ -57,10 +60,10 @@ namespace LibraryApi.Controllers
         }
 
         /// <summary>
-        /// Create New Genre
+        /// Create New Genre.
         /// </summary>
-        /// <param name="genre">Genre to create</param>
-        /// <returns>Result of Http request</returns>
+        /// <param name="genre">Genre to create.</param>
+        /// <returns>Result of Http request.</returns>
         [HttpPost]
         public IActionResult CreateGenre(Genre genre)
         {
@@ -69,10 +72,10 @@ namespace LibraryApi.Controllers
         }
 
         /// <summary>
-        /// Update Genre
+        /// Update Genre.
         /// </summary>
-        /// <param name="id">Genre's Id to update</param>
-        /// <param name="book">New Info</param>
+        /// <param name="id">Genre's Id to update.</param>
+        /// <param name="book">New Info.</param>
         /// <returns>Result of Http request</returns>
         [HttpPut("{id}")]
         public IActionResult UpdateGenre(int id, Genre genre)
@@ -87,10 +90,10 @@ namespace LibraryApi.Controllers
         }
 
         /// <summary>
-        /// Delete Genre
+        /// Delete Genre.
         /// </summary>
-        /// <param name="id">Genre's Id to delete</param>
-        /// <returns>Result of Http request</returns>
+        /// <param name="id">Genre's Id to delete.</param>
+        /// <returns>Result of Http request.</returns>
         [HttpDelete("{id}")]
         public IActionResult DeleteGenre(int id)
         {
@@ -104,10 +107,10 @@ namespace LibraryApi.Controllers
         }
 
         /// <summary>
-        /// Return all books of this Ganre
+        /// Return all books of this Ganre.
         /// </summary>
-        /// <param name="id">Ganre's Id</param>
-        /// <returns>Result of Http request</returns>
+        /// <param name="id">Ganre's Id.</param>
+        /// <returns>Result of Http request.</returns>
         [HttpGet("{id}/books")]
         public IActionResult GetBooksOfGenre(int id)
         {

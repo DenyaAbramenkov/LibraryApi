@@ -3,12 +3,12 @@
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    /// Model of Genre for Library service
+    /// Model of Genre for Library service.
     /// </summary>
     public class Genre
     {
         /// <summary>
-        /// Private counter for getting new Id of genre
+        /// Private counter for getting new Id of genre.
         /// </summary>
         private static int _counterForId = 0;
 
@@ -19,20 +19,25 @@
         }
 
         /// <summary>
-        /// Gets the Genres's Id
+        /// Gets the Genres's Id.
         /// </summary> 
         public int Id { get; private set; }
 
         /// <summary>
-        /// Gets or sets the Genres's Name
+        /// Gets or sets the Genres's Name.
         /// </summary>
-        [Required(ErrorMessage = "Genre's Name is required")]
+        [Required]
         public string Name { get; set; }
 
+        /// <summary>
+        /// Equals override for Genres compare.
+        /// </summary>
+        /// <param name="genre">Genre to compare.</param>
+        /// <returns>Result of comparattion.</returns>
         public override bool Equals(object genre)
         {
-            Genre newgenre = genre as Genre;
-            if (this.Name == newgenre.Name)
+            Genre newGenre = genre as Genre;
+            if (this.Name == newGenre.Name)
             {
                 return true;
             }

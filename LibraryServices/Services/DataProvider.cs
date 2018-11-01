@@ -4,15 +4,15 @@ using LibraryApi.Models;
 namespace LibraryApi.Services
 {
     /// <summary>
-    /// Class initializer data about Library
+    /// Class initializer data about Library.
     /// </summary>
     public class DataProvider : IDataProvider
     {
 
         /// <summary>
-        /// Set of books for using in Library
+        /// Set of books for using in Library.
         /// </summary>
-        /// <param name="books">Books in Set</param>
+        /// <param name="books">Books in Set.</param>
         public IEnumerable<Author> SetAuthors()
         {
             List<Author> authors = new List<Author>
@@ -21,16 +21,13 @@ namespace LibraryApi.Services
                 new Author("Good", "B", 1978)
             };
 
-            foreach (Author author in authors)
-            {
-               yield return author;
-            }
+            return authors;
         }
 
         /// <summary>
-        /// Set of authors for using in Library
+        /// Set of authors for using in Library.
         /// </summary>
-        /// <param name="authors">Authors in Set</param>
+        /// <param name="authors">Authors in Set.</param>
         public IEnumerable<Book> SetBooks()
         {
             List<Book> books = new List<Book>
@@ -40,16 +37,13 @@ namespace LibraryApi.Services
                 new Book("Book", 2010, 2)
             };
 
-            foreach(Book book in books)
-            {
-                yield return book;
-            }
+            return books;
         }
 
         /// <summary>
-        /// Set of genress for using in Library
+        /// Set of genress for using in Library.
         /// </summary>
-        /// <param name="genres">Genres in Set</param>
+        /// <param name="genres">Genres in Set.</param>
         public IEnumerable<Genre> SetGenre()
         {
             List<Genre> genres = new List<Genre>
@@ -59,14 +53,11 @@ namespace LibraryApi.Services
                 new Genre("Detective")
             };
 
-            foreach (Genre genre in genres)
-            {
-                yield return genre;
-            }
+            return genres;
         }
 
         /// <summary>
-        /// Set connection Genre with Book
+        /// Set connection Genre with Book.
         /// </summary>
         public IEnumerable<KeyValuePair<int, int>> SetBookGenreCon()
         {
@@ -77,11 +68,8 @@ namespace LibraryApi.Services
                 new KeyValuePair<int, int>(1, 3),
                 new KeyValuePair<int, int>(2, 2)
             };
-            
-            foreach(KeyValuePair<int, int> keyValue in booksAndGenreConncetion)
-            {
-                yield return keyValue;
-            }
+
+            return booksAndGenreConncetion;
         }
     }
 }

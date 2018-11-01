@@ -3,21 +3,21 @@
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    /// Model of Author for Library service
+    /// Model of Author for Library service.
     /// </summary>
     public class Author
     {
         /// <summary>
-        /// Private counter for getting new Id of author
+        /// Private counter for getting new Id of author.
         /// </summary>
         private static int _counterForId = 0;
 
         /// <summary>
-        /// Constructor for Author
+        /// Constructor for Author.
         /// </summary>
-        /// <param name="name">Name of Author</param>
-        /// <param name="surname">Surname of Author</param>
-        /// <param name="yearOfBirthday">Year of Birthday</param>
+        /// <param name="name">Name of Author.</param>
+        /// <param name="surname">Surname of Author.</param>
+        /// <param name="yearOfBirthday">Year of Birthday.</param>
         public Author(string name, string surname, int yearOfBirthday)
         {
             Name = name;
@@ -27,32 +27,37 @@
         }
 
         /// <summary>
-        /// Gets the Author's Id
+        /// Gets the Author's Id.
         /// </summary>
         public int Id { get; private set; }
 
         /// <summary>
-        /// Gets or sets the Author's Name
+        /// Gets or sets the Author's Name.
         /// </summary>
-        [Required(ErrorMessage = "Author's Name is required")]
+        [Required]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the Author's Surname
+        /// Gets or sets the Author's Surname.
         /// </summary>
         public string Surname { get; set; }
 
         /// <summary>
-        /// Gets or sets the Author's Year of Birthday
+        /// Gets or sets the Author's Year of Birthday.
         /// </summary>
         public int YearOfBirthday { get; set; }
 
+        /// <summary>
+        /// Equals override for Authors compare.
+        /// </summary>
+        /// <param name="genre">Author to compare.</param>
+        /// <returns>Result of comparattion.</returns>
         public override bool Equals(object author)
         {
-            Author newauthor = author as Author;
-            if (this.Name == newauthor.Name
-             && this.Surname == newauthor.Surname
-             && this.YearOfBirthday == newauthor.YearOfBirthday)
+            Author newAuthor = author as Author;
+            if (this.Name == newAuthor.Name
+             && this.Surname == newAuthor.Surname
+             && this.YearOfBirthday == newAuthor.YearOfBirthday)
             {
                 return true;
             }

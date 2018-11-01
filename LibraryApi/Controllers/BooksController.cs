@@ -6,28 +6,31 @@ using System.Collections.Generic;
 
 namespace LibraryApi.Controllers
 {
+    /// <summary>
+    /// Book's controller.
+    /// </summary>
     [Route("api/books")]
     [ApiController]
     public class BooksController : ControllerBase
     {
         /// <summary>
-        /// Library Service
+        /// Library Service.
         /// </summary>
         private readonly ILibrary _library;
 
         /// <summary>
-        /// Service Initialize
+        /// Service Initialize.
         /// </summary>
-        /// <param name="library">Library</param>
+        /// <param name="library">Library..</param>
         public BooksController(ILibrary library)
         {
             _library = library;
         }
 
         /// <summary>
-        /// Get all Books
+        /// Get all Books.
         /// </summary>
-        /// <returns>Result of Http request</returns>
+        /// <returns>Result of Http request.</returns>
         [HttpGet]
         public IActionResult GetBooks()
         {
@@ -41,10 +44,10 @@ namespace LibraryApi.Controllers
         }
 
         /// <summary>
-        /// Get Book by Id
+        /// Get Book by Id.
         /// </summary>
-        /// <param name="id">Book's Id</param>
-        /// <returns>Result of Http request</returns>
+        /// <param name="id">Book's Id.</param>
+        /// <returns>Result of Http request.</returns>
         [HttpGet("{id}", Name = "GetBook")]
         public IActionResult GetBook(int id)
         {
@@ -57,10 +60,10 @@ namespace LibraryApi.Controllers
         }
 
         /// <summary>
-        /// Create New Book
+        /// Create New Book.
         /// </summary>
-        /// <param name="book">Book to create</param>
-        /// <returns>Result of Http request</returns>
+        /// <param name="book">Book to create.</param>
+        /// <returns>Result of Http request.</returns>
         [HttpPost]
         public IActionResult CreateBook(Book book)
         {
@@ -69,11 +72,11 @@ namespace LibraryApi.Controllers
         }
 
         /// <summary>
-        /// Update Book
+        /// Update Book.
         /// </summary>
-        /// <param name="id">Book's Id to update</param>
-        /// <param name="book">New Info</param>
-        /// <returns>Result of Http request</returns>
+        /// <param name="id">Book's Id to update.</param>
+        /// <param name="book">New Info.</param>
+        /// <returns>Result of Http request.</returns>
         [HttpPut("{id}")]
         public IActionResult UpdateBook(int id, Book book)
         {
@@ -87,10 +90,10 @@ namespace LibraryApi.Controllers
         }
 
         /// <summary>
-        /// Delete Book
+        /// Delete Book.
         /// </summary>
-        /// <param name="id">Book's Id to delete</param>
-        /// <returns>Result of Http request</returns>
+        /// <param name="id">Book's Id to delete.</param>
+        /// <returns>Result of Http request.</returns>
         [HttpDelete("{id}")]
         public IActionResult DeleteBook(int id)
         {
@@ -104,11 +107,11 @@ namespace LibraryApi.Controllers
         }
 
         /// <summary>
-        /// Added Author to Book
+        /// Added Author to Book.
         /// </summary>
-        /// <param name="book_id">Book's Id</param>
-        /// <param name="author_id">Author's Id</param>
-        /// <returns>Result of Http request</returns>
+        /// <param name="book_id">Book's Id.</param>
+        /// <param name="author_id">Author's Id.</param>
+        /// <returns>Result of Http request.</returns>
         [HttpPost("{book_id}/authors/{author_id}")]
         public IActionResult AddAuthorToBook(int bookId, int authorId)
         {
@@ -127,7 +130,7 @@ namespace LibraryApi.Controllers
         /// </summary>
         /// <param name="book_id">The book id.</param>
         /// <param name="genre_id">The genre id.</param>
-        /// <returns>Result of Http request</returns>
+        /// <returns>Result of Http request.</returns>
         [HttpPost("{book_id}/genres/{genre_id}")]
         public IActionResult AddGenreToBook(int bookId, int genreId)
         {
