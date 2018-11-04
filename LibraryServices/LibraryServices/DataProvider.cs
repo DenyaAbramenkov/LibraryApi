@@ -1,13 +1,19 @@
 ﻿using System.Collections.Generic;
 using LibraryApi.Models;
+using LibraryServices.Models;
 
 namespace LibraryApi.Services
 {
     /// <summary>
     /// Class initializer data about Library.
     /// </summary>
-    public class DataProvider : IDataProvider
+    public class DataProvider:IDataProvider
     {
+        public IEnumerable<Book> Books { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public IEnumerable<Author> Authors { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public IEnumerable<Genre> Genres { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public IEnumerable<BookGenreMap> BookGenreMap { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public IEnumerable<BookAuthorMap> BookAuthorMap { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         /// <summary>
         /// Set of books for using in Library.
@@ -17,8 +23,8 @@ namespace LibraryApi.Services
         {
             List<Author> authors = new List<Author>
             {
-                new Author("The Gratest", "A", 1984), 
-                new Author("Good", "B", 1978)
+                //new Author("The Gratest", "A", 1984), 
+                //new Author("Good", "B", 1978)
             };
 
             return authors;
@@ -32,9 +38,9 @@ namespace LibraryApi.Services
         {
             List<Book> books = new List<Book>
             {
-                new Book("The Gratest Book", 2000, 1),
-                new Book("Good Book", 2005, 2),
-                new Book("Book", 2010, 2)
+                //new Book("The Gratest Book", 2000),
+                //new Book("Good Book", 2005),
+                //new Book("Book", 2010)
             };
 
             return books;

@@ -2,6 +2,7 @@
 using System.Collections;
 using LibraryApi.Models;
 using System.Linq;
+using LibraryServices.Models;
 
 namespace LibraryApi.Services
 {
@@ -30,17 +31,22 @@ namespace LibraryApi.Services
         /// <summary>
         /// Genre's collection.
         /// </summary>
-        private readonly List<KeyValuePair<int, int>> _bookAndGenresConnection;
+        private readonly List<BookGenreMap> _bookAndGenresConnection;
 
         /// <summary>
         /// Service collections initialize.
         /// </summary>
-        public Library(IDataProvider data)
+
+        private LibraryModelDbContext _db;
+
+        public Library( LibraryModelDbContext context)
         {
-            _authors = data.SetAuthors().ToList();
-            _booksInLibrary = data.SetBooks().ToList();
-            _genres = data.SetGenre().ToList();
-            _bookAndGenresConnection = data.SetBookGenreCon().ToList();
+            _db = context;
+           
+            //_booksInLibrary = context.Books.ToList();
+            //_genres = context.Genres.ToList();
+            //_bookAndGenresConnection = context.BookGenreMap.ToList();
+            //_authors = context.Authors.ToList();
         }
 
         #endregion
@@ -53,7 +59,7 @@ namespace LibraryApi.Services
         /// <param name="book">New Book.</param>
         public void CreateBook(Book book)
         {
-            _booksInLibrary.Add(book);
+            _db.Add(book);
         }
 
         /// <summary>
@@ -62,7 +68,7 @@ namespace LibraryApi.Services
         /// <param name="id">Book's Id.</param>
         public void DeleteBook(int id)
         {
-            Book bookToDelete = _booksInLibrary.Find((book) => book.Id == id);
+            Book bookToDelete = _booksInLibrary.Find((book) => book.BookId == id);
             _booksInLibrary.Remove(bookToDelete);
         }
 
@@ -71,7 +77,7 @@ namespace LibraryApi.Services
         /// </summary>
         public IEnumerable<Book> GetAllBook()
         {
-            return _booksInLibrary;
+            return _db.Books.Local.ToList();
         }
 
         /// <summary>
@@ -81,7 +87,14 @@ namespace LibraryApi.Services
         /// <returns></returns>
         public Book GetBook(int id)
         {
-            return _booksInLibrary.Find((book) => book.Id == id);
+            Book book = _db.Books.FirstOrDefault(b => b.BookId == id);
+
+            if (book != null)
+            {
+                return book;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -92,12 +105,11 @@ namespace LibraryApi.Services
         /// <returns>Updated Book.</returns>
         public Book UpdateBook(int id, Book book)
         {
-            Book bookToUpdate = _booksInLibrary.Find((bookUpd) => bookUpd.Id == id);
+            Book bookToUpdate = _booksInLibrary.Find((bookUpd) => bookUpd.BookId == id);
             if (book != null)
             {
                 bookToUpdate.Name = book.Name;
-                bookToUpdate.AuthorId = book.AuthorId;
-                bookToUpdate.Year = book.Year;
+                bookToUpdate.YearOfPublishing = book.YearOfPublishing;
             }
             return bookToUpdate;
         }
@@ -107,12 +119,12 @@ namespace LibraryApi.Services
         /// </summary>
         /// <param name="bookId">Book's Id.</param>
         /// <returns>Updated Book without author.</returns>
-        public Book DeleteAutorFromBook(int id)
-        {
-            Book bookToUpdate = _booksInLibrary.Find((book) => book.Id == id);
-            bookToUpdate.AuthorId = null;
-            return bookToUpdate;
-        }
+        //public Book DeleteAutorFromBook(int id)
+        //{
+        //    Book bookToUpdate = _booksInLibrary.Find((book) => book.Id == id);
+        //    bookToUpdate.AuthorId = null;
+        //    return bookToUpdate;
+        //}//TODO: author delete
 
         /// <summary>
         /// Add Author To Book.
@@ -120,12 +132,12 @@ namespace LibraryApi.Services
         /// <param name="bookId">Book's Id.</param>
         /// <param name="authorId">Author's Id.</param>
         /// <returns>New Book with added Author.</returns>
-        public Book AddAuthorToBook(int bookId, int authorId)
-        {
-            Book bookToUpdate = _booksInLibrary.Find((book) => book.Id == bookId);
-            bookToUpdate.AuthorId = authorId;
-            return bookToUpdate;
-        }
+        //public Book AddAuthorToBook(int bookId, int authorId)
+        //{
+        //    Book bookToUpdate = _booksInLibrary.Find((book) => book.Id == bookId);
+        //    bookToUpdate.AuthorId = authorId;
+        //    return bookToUpdate;
+        //}TODO:ADD AUTHOR
 
         /// <summary>
         /// Adds the genre to book.
@@ -139,7 +151,7 @@ namespace LibraryApi.Services
 
             if (GetBook(bookId) != null && _genres.Any((genre) => genre.Id == genreId))
             {
-                _bookAndGenresConnection.Add(new KeyValuePair<int, int>(bookId, genreId));
+                _bookAndGenresConnection.Add(new BookGenreMap());
                 result = true;
             }
             return result;
@@ -154,7 +166,7 @@ namespace LibraryApi.Services
         /// </summary>
         public IEnumerable<Author> GetAllAuthors()
         {
-            return _authors;
+            return _db.Authors.Local;
         }
 
         /// <summary>
@@ -164,7 +176,7 @@ namespace LibraryApi.Services
         /// <returns>Author by Id.</returns>
         public Author GetAuthor(int id)
         {
-            return _authors.Find((Author) => Author.Id == id);
+            return _authors.Find((Author) => Author.AuthorId == id);
         }
 
         /// <summary>
@@ -174,7 +186,7 @@ namespace LibraryApi.Services
         /// <param name="author">New Author.</
         public Author UpdateAuthor(int id, Author author)
         {
-            Author authorToUpdate = _authors.Find((Author) => Author.Id == id);
+            Author authorToUpdate = _authors.Find((Author) => Author.AuthorId == id);
             if (authorToUpdate != null)
             {
                 authorToUpdate.Name = author.Name;
@@ -197,28 +209,28 @@ namespace LibraryApi.Services
         /// Delete Author from collection.
         /// </summary>
         /// <param name="id">Author's Id.</param>
-        public void DeleteAuthor(int id)
-        {
-            Author authorToDelete = _authors.Find(Author => Author.Id == id);
-            foreach (Book book in _booksInLibrary)
-            {
-                if (book.AuthorId == id)
-                {
-                    _booksInLibrary.Remove(book);
-                }
-            }
-            _authors.Remove(authorToDelete);
-        }
+        //public void DeleteAuthor(int id)
+        //{
+        //    Author authorToDelete = _authors.Find(Author => Author.Id == id);
+        //    foreach (BookAuthorMap book in _booksInLibrary)
+        //    {
+        //        if (book.AuthorId == id)
+        //        {
+        //            _booksInLibrary.Remove(book);
+        //        }
+        //    }
+        //    _authors.Remove(authorToDelete);
+        //}
 
         /// <summary>
         /// Get book's of author.
         /// </summary>
         /// <param name="authorId">Author's Id.</param>
         /// <returns></returns>
-        public IEnumerable<Book> GetAuthorBooks(int authorId)
-        {
-            return _booksInLibrary.Where((book) => book.AuthorId == authorId);
-        }
+        //public IEnumerable<Book> GetAuthorBooks(int authorId)
+        //{
+        //    return _booksInLibrary.Where((book) => book.AuthorId == authorId);
+        //}
         #endregion
 
         #region GenreRegion
@@ -276,19 +288,39 @@ namespace LibraryApi.Services
             _genres.Remove(genreToDelete);
         }
 
+        public Book DeleteAutorFromBook(int bookId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Book AddAuthorToBook(int bookId, int authorId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void DeleteAuthor(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerable<Book> GetAuthorBooks(int authorId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         /// All book's of this Genre.
         /// </summary>
         /// <param name="genreId">Genre's Id.</param>
         /// <returns></returns>
-        public IEnumerable<Book> GetAllGenreBooks(int genreId)
-        {
-            foreach(KeyValuePair<int, int> keyValue in
-                 _bookAndGenresConnection.Where(bookGenre => bookGenre.Value == genreId))
-            {
-                yield return _booksInLibrary.Find(book => book.Id == keyValue.Key);
-            }
-        }
+        //public IEnumerable<Book> GetAllGenreBooks(int genreId)
+        //{
+        //    foreach (KeyValuePair<int, int> keyValue in
+        //         _bookAndGenresConnection.Where(bookGenre => bookGenre.Value == genreId))
+        //    {
+        //        yield return _booksInLibrary.Find(book => book.Id == keyValue.Key);
+        //    }
+        //}
 
         #endregion
 

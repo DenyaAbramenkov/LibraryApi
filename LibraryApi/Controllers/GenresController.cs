@@ -111,16 +111,16 @@ namespace LibraryApi.Controllers
         /// </summary>
         /// <param name="id">Ganre's Id.</param>
         /// <returns>Result of Http request.</returns>
-        [HttpGet("{id}/books")]
-        public IActionResult GetBooksOfGenre(int id)
-        {
-            List<Book> books = _library.GetAllGenreBooks(id).ToList();
-            if (books.Count == 0)
-            {
-                return NotFound("There was nothing found");
-            }
+        //[HttpGet("{id}/books")]
+        //public IActionResult GetBooksOfGenre(int id)
+        //{
+        //    List<Book> books = _library.GetAllGenreBooks(id).ToList();
+        //    if (books.Count == 0)
+        //    {
+        //        return NotFound("There was nothing found");
+        //    }
 
-            return Ok(books);
-        }
+        //    return Ok(books);
+        //}
     }
 }

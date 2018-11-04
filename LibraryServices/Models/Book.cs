@@ -1,6 +1,7 @@
 ﻿namespace LibraryApi.Models
 {
     using System.ComponentModel.DataAnnotations;
+   
 
     /// <summary>
     /// Model of Book for Library service.
@@ -18,18 +19,17 @@
         /// <param name="name">Name of Book.</param>
         /// <param name="year">Year of publishing.</param>
         /// <param name="authorId">Author's id, who wrote book.</param>
-        public Book(string name, int year, int? authorId = null)
-        {
-            Name = name;
-            AuthorId = authorId;
-            Year = year;
-            Id = ++_counterForId;
-        }
+        //public Book(string name, int yearofpublishing)
+        //{
+        //    Name = name;
+        //    YearOfPublishing = yearofpublishing;
+        //    BookId = ++_counterForId;
+        //}
 
         /// <summary>
         /// Gets the Book's Id.
         /// </summary> 
-        public int Id { get; private set; }
+        public int BookId { get; private set; }
 
         /// <summary>
         /// Gets or sets the Book's Name.
@@ -38,15 +38,10 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the Book's AuthorId(Can be null).
-        /// </summary>
-        public int? AuthorId { get; set; }
-
-        /// <summary>
         /// Gets or sets the Book's Year of publishing.
         /// </summary>
         [Range (1500, 2018)]
-        public int Year { get; set; }
+        public int YearOfPublishing { get; set; }
 
         /// <summary>
         /// Equals override for Books compare.
@@ -57,8 +52,7 @@
         {
             Book newBook = book as Book;
             if (this.Name == newBook.Name
-             && this.AuthorId == newBook.AuthorId
-             && this.Year == newBook.Year)
+             && this.YearOfPublishing == newBook.YearOfPublishing)
             {
                 return true;
             }

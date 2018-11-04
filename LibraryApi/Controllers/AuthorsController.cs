@@ -51,7 +51,7 @@ namespace LibraryApi.Controllers
         [HttpGet("{id}", Name = "GetAuthor")]
         public IActionResult GetAuthor(int id)
         {
-            var item = _library.GetAllAuthors().ToList().Find((Author) => Author.Id == id);
+            var item = _library.GetAllAuthors().ToList().Find((Author) => Author.AuthorId == id);
             if (item == null)
             {
                 return NotFound();

@@ -155,7 +155,7 @@ namespace LibraryApi.Services
         /// </summary>
         /// <param name="genre_Id">The genre identifier.</param>
         /// <returns>Enumeration of books.</returns>
-        IEnumerable<Book> GetAllGenreBooks(int genreId);
+        //IEnumerable<Book> GetAllGenreBooks(int genreId);
 
         #endregion
 

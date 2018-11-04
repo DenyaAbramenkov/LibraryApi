@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApi
 {
@@ -19,8 +20,8 @@ namespace LibraryApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ILibrary, Library>();
-            services.AddSingleton<IDataProvider, DataProvider>();
+            services.AddTransient<ILibrary, Library>();
+            services.AddTransient<IDataProvider, DataProvider>();
             services.AddMvc();
             services.AddSwaggerGen(c =>
             {
@@ -31,6 +32,10 @@ namespace LibraryApi
                     Description = "Apy for library",
                 });
             });
+
+            var connection = @"Data Source=DESKTOP-689S6T3\SERVER;Initial Catalog=LibraryDb;Integrated Security=True";
+            services.AddDbContext<LibraryModelDbContext>(options => options.UseSqlServer(connection));
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILibrary library)
@@ -41,6 +46,16 @@ namespace LibraryApi
             {
                 c.SwaggerEndpoint("/swagger/v3/swagger.json", "My API V1");
             });
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
         }
     }
 }

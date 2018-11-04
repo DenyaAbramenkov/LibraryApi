@@ -35,12 +35,12 @@ namespace LibraryApi.Controllers
         public IActionResult GetBooks()
         {
             List<Book> booklist = _library.GetAllBook().ToList();
-            if (booklist.Count == 0)
-            {
-                return NotFound("Any book are not recorded!");
-            }
+            //if (booklist.Count == 0)
+            //{
+            //    return NotFound("Any book are not recorded!");
+            //}
 
-            return Ok(booklist);
+            return Ok(booklist.Count);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace LibraryApi.Controllers
         [HttpGet("{id}", Name = "GetBook")]
         public IActionResult GetBook(int id)
         {
-            var item = _library.GetAllBook().ToList().Find((Book) => Book.Id == id);
+            var item = _library.GetBook(id);
             if (item == null)
             {
                 return NotFound();

@@ -1,10 +1,14 @@
 ﻿namespace LibraryApi.Models
 {
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using Microsoft.EntityFrameworkCore;
+
 
     /// <summary>
     /// Model of Author for Library service.
     /// </summary>
+    [Table("Authors")]
     public class Author
     {
         /// <summary>
@@ -12,24 +16,11 @@
         /// </summary>
         private static int _counterForId = 0;
 
-        /// <summary>
-        /// Constructor for Author.
-        /// </summary>
-        /// <param name="name">Name of Author.</param>
-        /// <param name="surname">Surname of Author.</param>
-        /// <param name="yearOfBirthday">Year of Birthday.</param>
-        public Author(string name, string surname, int yearOfBirthday)
-        {
-            Name = name;
-            Surname = surname;
-            YearOfBirthday = yearOfBirthday;
-            Id = ++_counterForId;
-        }
 
         /// <summary>
         /// Gets the Author's Id.
         /// </summary>
-        public int Id { get; private set; }
+        public int AuthorId { get; private set; }
 
         /// <summary>
         /// Gets or sets the Author's Name.
@@ -40,11 +31,13 @@
         /// <summary>
         /// Gets or sets the Author's Surname.
         /// </summary>
+        [Required]
         public string Surname { get; set; }
 
         /// <summary>
         /// Gets or sets the Author's Year of Birthday.
         /// </summary>
+        [Required]
         public int YearOfBirthday { get; set; }
 
         /// <summary>
