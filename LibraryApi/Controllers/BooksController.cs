@@ -51,7 +51,7 @@ namespace LibraryApi.Controllers
         [HttpGet("{id}", Name = "GetBook")]
         public IActionResult GetBook(int id)
         {
-            var item = _library.GetAllBook().ToList().Find((Book) => Book.Id == id);
+            var item = _library.GetBook(id);
             if (item == null)
             {
                 return NotFound();
@@ -134,11 +134,8 @@ namespace LibraryApi.Controllers
         [HttpPost("{book_id}/genres/{genre_id}")]
         public IActionResult AddGenreToBook(int bookId, int genreId)
         {
-            if (_library.AddGenreToBook(bookId, genreId))
-            {
-                return Ok("Added book genre");
-            }
-            return NotFound("No book or/and genre with such ids found!");
+            _library.AddGenreToBook(bookId, genreId);
+            return Ok("New BookGenreMap was Added.");
         }
 
     }

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryApi", "LibraryApi\Li
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryServiceTest", "LibraryServiceTest\LibraryServiceTest.csproj", "{588F9920-6F88-45DF-81FB-040CBB166595}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryServices", "LibraryServices\LibraryServices.csproj", "{71C5A070-7381-4DE0-B35E-C87E65D01940}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryServices", "LibraryServices\LibraryServices.csproj", "{71C5A070-7381-4DE0-B35E-C87E65D01940}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

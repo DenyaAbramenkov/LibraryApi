@@ -6,22 +6,11 @@
     /// Model of Genre for Library service.
     /// </summary>
     public class Genre
-    {
-        /// <summary>
-        /// Private counter for getting new Id of genre.
-        /// </summary>
-        private static int _counterForId = 0;
-
-        public Genre(string name)
-        {
-            Name = name;
-            Id = ++_counterForId;
-        }
-
+    {  
         /// <summary>
         /// Gets the Genres's Id.
         /// </summary> 
-        public int Id { get; private set; }
+        public int GenreId { get; private set; }
 
         /// <summary>
         /// Gets or sets the Genres's Name.
