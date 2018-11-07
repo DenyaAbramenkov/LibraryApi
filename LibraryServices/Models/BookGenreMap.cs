@@ -22,6 +22,6 @@ namespace LibraryServices.Models
         /// Genre's Id as Foreighn Key.
         /// </summary>
         [ForeignKey("Genres")]
-        public int AuthorId { get; set; }
+        public int GenreId { get; set; }
     }
 }

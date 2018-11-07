@@ -8,28 +8,11 @@
     /// </summary>
     public class Book
     {
-        /// <summary>
-        /// Private counter for getting new Id of author.
-        /// </summary>
-        private static int _counterForId = 0;
-
-        /// <summary>
-        /// Constructor for Book
-        /// </summary>
-        /// <param name="name">Name of Book.</param>
-        /// <param name="year">Year of publishing.</param>
-        /// <param name="authorId">Author's id, who wrote book.</param>
-        //public Book(string name, int yearofpublishing)
-        //{
-        //    Name = name;
-        //    YearOfPublishing = yearofpublishing;
-        //    BookId = ++_counterForId;
-        //}
-
+        
         /// <summary>
         /// Gets the Book's Id.
         /// </summary> 
-        public int BookId { get; private set; }
+        public int BookId { get; set; }
 
         /// <summary>
         /// Gets or sets the Book's Name.

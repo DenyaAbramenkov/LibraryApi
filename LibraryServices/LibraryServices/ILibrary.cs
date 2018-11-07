@@ -48,7 +48,7 @@ namespace LibraryApi.Services
         /// </summary>
         /// <param name="bookId">Book's Id.</param>
         /// <returns>Updated Book without author.</returns>
-        Book DeleteAutorFromBook(int bookId);
+        void DeleteAutorFromBook(int bookId);
 
         /// <summary>
         /// Add Author To Book.
@@ -56,7 +56,7 @@ namespace LibraryApi.Services
         /// <param name="bookId">Book's Id.</param>
         /// <param name="authorId">Author's Id.</param>
         /// <returns>New Book with added Author.</returns>
-        Book AddAuthorToBook(int bookId, int authorId);
+        void AddAuthorToBook(int bookId, int authorId);
 
         /// <summary>
         /// Adds the genre to book.
@@ -64,7 +64,7 @@ namespace LibraryApi.Services
         /// <param name="book_id">The book identifier.</param>
         /// <param name="genre_id">The genre identifier.</param>
         /// <returns>Is added new link.</returns>
-        bool AddGenreToBook(int book_id, int genre_id);
+        void AddGenreToBook(int book_id, int genre_id);
 
         #endregion
 
@@ -155,7 +155,7 @@ namespace LibraryApi.Services
         /// </summary>
         /// <param name="genre_Id">The genre identifier.</param>
         /// <returns>Enumeration of books.</returns>
-        //IEnumerable<Book> GetAllGenreBooks(int genreId);
+        IEnumerable<Book> GetAllGenreBooks(int genreId);
 
         #endregion
 

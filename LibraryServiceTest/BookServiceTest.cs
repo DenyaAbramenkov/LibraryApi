@@ -10,26 +10,22 @@
 //    [TestClass]
 //    public class BookServiceTest
 //    {
-//        private static Mock<IDataProvider> _data;
+//        private ILibraryModelDbContext _db;
 
-//        private static List<Book> _books;
+//        private ILibrary _library;
 
 //        [ClassInitialize]
-//        public static void Initialize(TestContext context)
+//        public static void Initialize(ILibraryModelDbContext context)
 //        {
-//            _books = new List<Book> {
-//                new Book("The Gratest Book", 2000, 1),
-//                new Book("Good Book", 2005, 2),
-//                new Book("Book", 2010, 2)
-//            };
-//            _data = new MockDataImitation().MockSetBooks(_books);
+
 //        }
 
 //        [TestMethod]
 //        public void BookService_GetAllBooks_Correct()
 //        {
 //            //Arange
-//            var library = _data.Object;
+//            Mock<ILibraryModelDbContext> mock = new Mock<ILibraryModelDbContext>();
+//            mock.Setup(m +> mock.bo)
 
 //            //Act
 //            ////List<Book> result = new Library(library).GetAllBook().ToList();
@@ -96,6 +92,15 @@
 //            //Assert
 //            CollectionAssert.AreEqual(_books, result);
 //        }
+
+//        private static Book[] BooksToCompare =
+//        {
+//            new Book { BookId = 1, Name = "Book1" },
+//            new Book { BookId = 2, Name = "Book2" },
+//            new Book { BookId = 3, Name = "Book3" },
+//            new Book { BookId = 4, Name = "Book4" }
+//        };
+
 
 //    }
 //}

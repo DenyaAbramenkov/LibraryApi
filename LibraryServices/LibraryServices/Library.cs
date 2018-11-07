@@ -3,6 +3,7 @@ using System.Collections;
 using LibraryApi.Models;
 using System.Linq;
 using LibraryServices.Models;
+using System;
 
 namespace LibraryApi.Services
 {
@@ -14,40 +15,17 @@ namespace LibraryApi.Services
         #region Initialize
 
         /// <summary>
-        /// Book's collection.
+        /// Library's constructor
         /// </summary>
-        private List<Book> _booksInLibrary = new List<Book>();
-
-        /// <summary>
-        /// Author's collection.
-        /// </summary>
-        private List<Author> _authors;
-
-        /// <summary>
-        /// Genre's collection.
-        /// </summary>
-        private List<Genre> _genres;
-
-        /// <summary>
-        /// Genre's collection.
-        /// </summary>
-        private readonly List<BookGenreMap> _bookAndGenresConnection;
-
-        /// <summary>
-        /// Service collections initialize.
-        /// </summary>
-
-        private LibraryModelDbContext _db;
-
-        public Library( LibraryModelDbContext context)
+        public Library(ILibraryModelDbContext context)
         {
             _db = context;
-           
-            //_booksInLibrary = context.Books.ToList();
-            //_genres = context.Genres.ToList();
-            //_bookAndGenresConnection = context.BookGenreMap.ToList();
-            //_authors = context.Authors.ToList();
         }
+
+        /// <summary>
+        /// Service context initialize.
+        /// </summary>
+        private ILibraryModelDbContext _db;
 
         #endregion
 
@@ -59,7 +37,15 @@ namespace LibraryApi.Services
         /// <param name="book">New Book.</param>
         public void CreateBook(Book book)
         {
-            _db.Add(book);
+            try
+            {
+                _db.Books.Add(book);
+                _db.SaveChanges();
+            }
+            catch (ArgumentException)
+            {
+                throw new NullReferenceException("Wrong arg's input");
+            }
         }
 
         /// <summary>
@@ -68,8 +54,16 @@ namespace LibraryApi.Services
         /// <param name="id">Book's Id.</param>
         public void DeleteBook(int id)
         {
-            Book bookToDelete = _booksInLibrary.Find((book) => book.BookId == id);
-            _booksInLibrary.Remove(bookToDelete);
+            Book bookToDelete = _db.Books.FirstOrDefault((book) => book.BookId == id);
+            try
+            {
+                _db.Books.Remove(bookToDelete);
+                _db.SaveChanges();
+            }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find Book with such Id");
+            } 
         }
 
         /// <summary>
@@ -77,7 +71,7 @@ namespace LibraryApi.Services
         /// </summary>
         public IEnumerable<Book> GetAllBook()
         {
-            return _db.Books.Local.ToList();
+            return _db.Books.ToList();
         }
 
         /// <summary>
@@ -87,14 +81,15 @@ namespace LibraryApi.Services
         /// <returns></returns>
         public Book GetBook(int id)
         {
-            Book book = _db.Books.FirstOrDefault(b => b.BookId == id);
-
-            if (book != null)
+            Book book = _db.Books.FirstOrDefault((bookToFind) => bookToFind.BookId == id);
+            try
             {
                 return book;
             }
-
-            return null;
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find Book with such Id");
+            }
         }
 
         /// <summary>
@@ -105,26 +100,38 @@ namespace LibraryApi.Services
         /// <returns>Updated Book.</returns>
         public Book UpdateBook(int id, Book book)
         {
-            Book bookToUpdate = _booksInLibrary.Find((bookUpd) => bookUpd.BookId == id);
-            if (book != null)
+            Book bookToUpdate = _db.Books.FirstOrDefault((bookToFind) => bookToFind.BookId == id);
+            try
             {
                 bookToUpdate.Name = book.Name;
                 bookToUpdate.YearOfPublishing = book.YearOfPublishing;
+                _db.SaveChanges();
+                return bookToUpdate;
             }
-            return bookToUpdate;
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find Book with such Id");
+            }
         }
 
         /// <summary>
         /// Delete Author from Book.
         /// </summary>
-        /// <param name="bookId">Book's Id.</param>
+        /// <param name = "bookId" > Book's Id.</param>
         /// <returns>Updated Book without author.</returns>
-        //public Book DeleteAutorFromBook(int id)
-        //{
-        //    Book bookToUpdate = _booksInLibrary.Find((book) => book.Id == id);
-        //    bookToUpdate.AuthorId = null;
-        //    return bookToUpdate;
-        //}//TODO: author delete
+        public void DeleteAutorFromBook(int id)
+        {
+            BookAuthorMap bookToUpdate = _db.BookAuthorMap.FirstOrDefault((book) => book.BookId == id);
+            try
+            {
+                _db.BookAuthorMap.Remove(bookToUpdate);
+                _db.SaveChanges();
+            }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find Book with such Id, which has Author");
+            }
+        }
 
         /// <summary>
         /// Add Author To Book.
@@ -132,41 +139,57 @@ namespace LibraryApi.Services
         /// <param name="bookId">Book's Id.</param>
         /// <param name="authorId">Author's Id.</param>
         /// <returns>New Book with added Author.</returns>
-        //public Book AddAuthorToBook(int bookId, int authorId)
-        //{
-        //    Book bookToUpdate = _booksInLibrary.Find((book) => book.Id == bookId);
-        //    bookToUpdate.AuthorId = authorId;
-        //    return bookToUpdate;
-        //}TODO:ADD AUTHOR
+        public void AddAuthorToBook(int bookId, int authorId)
+        {
+            Book bookToUpdate = _db.Books.FirstOrDefault((book) => book.BookId == bookId);
+            try
+            {
+                BookAuthorMap bookAuthor = new BookAuthorMap();
+                bookAuthor.BookId = bookToUpdate.BookId;
+                bookAuthor.AuthorId = authorId;
+                _db.BookAuthorMap.Add(bookAuthor);
+                _db.SaveChanges();
+            }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find Book with such Id");
+            }
+          
+        }
 
         /// <summary>
         /// Adds the genre to book.
         /// </summary>
         /// <param name="bookId">The book's Id.</param>
         /// <param name="genreId">The genre's Id.</param>
-        /// <returns>Is added new link.</returns>
-        public bool AddGenreToBook(int bookId, int genreId)
+        /// <returns>Is added new genre to book.</returns>
+        public void AddGenreToBook(int bookId, int genreId)
         {
-            bool result = false;
-
-            if (GetBook(bookId) != null && _genres.Any((genre) => genre.Id == genreId))
+            Book bookToUpdate = _db.Books.FirstOrDefault((book) => book.BookId == bookId);
+            try
             {
-                _bookAndGenresConnection.Add(new BookGenreMap());
-                result = true;
+                BookGenreMap bookGenre = new BookGenreMap();
+                bookGenre.BookId = bookToUpdate.BookId;
+                bookGenre.GenreId = genreId;
+                _db.BookGenreMap.Add(bookGenre);
+                _db.SaveChanges();
             }
-            return result;
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find Book with such Id");
+            }
         }
 
-        #endregion
+        //#endregion
 
-        #region AuthorRegion
+        //#region AuthorRegion
 
         /// <summary>
         /// Return All Authors.
         /// </summary>
         public IEnumerable<Author> GetAllAuthors()
         {
-            return _db.Authors.Local;
+            return _db.Authors.ToList();
         }
 
         /// <summary>
@@ -176,7 +199,15 @@ namespace LibraryApi.Services
         /// <returns>Author by Id.</returns>
         public Author GetAuthor(int id)
         {
-            return _authors.Find((Author) => Author.AuthorId == id);
+            Author author = _db.Authors.FirstOrDefault((authorToFind) => authorToFind.AuthorId == id);
+            try
+            {
+                return author;
+            }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find Author with such Id");
+            }
         }
 
         /// <summary>
@@ -186,14 +217,19 @@ namespace LibraryApi.Services
         /// <param name="author">New Author.</
         public Author UpdateAuthor(int id, Author author)
         {
-            Author authorToUpdate = _authors.Find((Author) => Author.AuthorId == id);
-            if (authorToUpdate != null)
+            Author authorToUpdate = _db.Authors.FirstOrDefault((authorToFind) => authorToFind.AuthorId == id);
+            try
             {
                 authorToUpdate.Name = author.Name;
                 authorToUpdate.Surname = author.Surname;
                 authorToUpdate.YearOfBirthday = author.YearOfBirthday;
+                _db.SaveChanges();
+                return authorToUpdate;
             }
-            return authorToUpdate;
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find Author with such Id");
+            }
         }
 
         /// <summary>
@@ -202,35 +238,56 @@ namespace LibraryApi.Services
         /// <param name="author">New Author to add.</param>
         public void CreateAuthor(Author author)
         {
-            _authors.Add(author);
+            try
+            {
+                _db.Authors.Add(author);
+                _db.SaveChanges();
+            }
+            catch (ArgumentException)
+            {
+                throw new NullReferenceException("Wrong arg's input");
+            };
         }
 
         /// <summary>
         /// Delete Author from collection.
         /// </summary>
         /// <param name="id">Author's Id.</param>
-        //public void DeleteAuthor(int id)
-        //{
-        //    Author authorToDelete = _authors.Find(Author => Author.Id == id);
-        //    foreach (BookAuthorMap book in _booksInLibrary)
-        //    {
-        //        if (book.AuthorId == id)
-        //        {
-        //            _booksInLibrary.Remove(book);
-        //        }
-        //    }
-        //    _authors.Remove(authorToDelete);
-        //}
+        public void DeleteAuthor(int id)
+        {
+            Author authorToDelete = _db.Authors.FirstOrDefault((authorToFind) => authorToFind.AuthorId == id);
+            try
+            {
+                _db.Authors.Remove(authorToDelete);
+                _db.SaveChanges();
+            }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find Author with such Id");
+            }
+        }
 
         /// <summary>
         /// Get book's of author.
         /// </summary>
         /// <param name="authorId">Author's Id.</param>
         /// <returns></returns>
-        //public IEnumerable<Book> GetAuthorBooks(int authorId)
-        //{
-        //    return _booksInLibrary.Where((book) => book.AuthorId == authorId);
-        //}
+        public IEnumerable<Book> GetAuthorBooks(int authorId)
+        {
+            var result = from book in _db.Books
+                         join booksofauthor in _db.BookAuthorMap on book.BookId equals booksofauthor.BookId
+                         where booksofauthor.AuthorId == authorId
+                         select book;
+            try
+            {
+                return result;
+            }
+            catch(NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find books of author with such Id");
+            }
+        }
+
         #endregion
 
         #region GenreRegion
@@ -240,7 +297,7 @@ namespace LibraryApi.Services
         /// </summary>
         public IEnumerable<Genre> GetAllGenres()
         {
-            return _genres;
+            return _db.Genres.ToList();
         }
 
         /// <summary>
@@ -250,7 +307,15 @@ namespace LibraryApi.Services
         /// <returns>Genre by Id.</returns>
         public Genre GetGenre(int id)
         {
-            return _genres.Find((Genre) => Genre.Id == id);
+            Genre genre = _db.Genres.FirstOrDefault((genreToFind) => genreToFind.GenreId == id);
+            try
+            {
+                return genre;
+            }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find Genre with such Id");
+            }
         }
 
         /// <summary>
@@ -259,7 +324,15 @@ namespace LibraryApi.Services
         /// <param name="genre">New Genre to add.</param>
         public void CreateGenre(Genre genre)
         {
-            _genres.Add(genre);
+            try
+            {
+                _db.Genres.Add(genre);
+                _db.SaveChanges();
+            }
+            catch (ArgumentException)
+            {
+                throw new NullReferenceException("Wrong arg's input");
+            };
         }
 
         /// <summary>
@@ -270,12 +343,17 @@ namespace LibraryApi.Services
         /// <returns>Updated Genre.</returns>
         public Genre UpdateGenre(int id, Genre genre)
         {
-            Genre genreToUpdate = _genres.Find((genreUpd) => genreUpd.Id == id);
-            if (genre != null)
+            Genre genreToUpdate = _db.Genres.FirstOrDefault((genreToFind) => genreToFind.GenreId == id);
+            try
             {
                 genreToUpdate.Name = genre.Name;
+                _db.SaveChanges();
+                return genreToUpdate;
             }
-            return genreToUpdate;
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find Genre with such Id");
+            }
         }
 
         /// <summary>
@@ -284,28 +362,16 @@ namespace LibraryApi.Services
         /// <param name="id">Genre's Id.</param>
         public void DeleteGenre(int id)
         {
-            Genre genreToDelete = _genres.Find((genre) => genre.Id == id);
-            _genres.Remove(genreToDelete);
-        }
-
-        public Book DeleteAutorFromBook(int bookId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Book AddAuthorToBook(int bookId, int authorId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void DeleteAuthor(int id)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IEnumerable<Book> GetAuthorBooks(int authorId)
-        {
-            throw new System.NotImplementedException();
+            Genre genreToDelete = _db.Genres.FirstOrDefault((genreToFind) => genreToFind.GenreId == id);
+            try
+            {
+                _db.Genres.Remove(genreToDelete);
+                _db.SaveChanges();
+            }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find Genre with such Id");
+            }
         }
 
         /// <summary>
@@ -313,14 +379,22 @@ namespace LibraryApi.Services
         /// </summary>
         /// <param name="genreId">Genre's Id.</param>
         /// <returns></returns>
-        //public IEnumerable<Book> GetAllGenreBooks(int genreId)
-        //{
-        //    foreach (KeyValuePair<int, int> keyValue in
-        //         _bookAndGenresConnection.Where(bookGenre => bookGenre.Value == genreId))
-        //    {
-        //        yield return _booksInLibrary.Find(book => book.Id == keyValue.Key);
-        //    }
-        //}
+        public IEnumerable<Book> GetAllGenreBooks(int genreId)
+        {
+            var result = from book in _db.Books
+                         join genresBook in _db.BookGenreMap on book.BookId equals genresBook.BookId
+                         where genresBook.GenreId == genreId
+                         select book;
+            try
+            {
+                return result;
+            }
+            catch(NullReferenceException)
+            {
+                throw new NullReferenceException("Can't find no book with such Genres, Where Genres.Id = genreId");
+            }
+           
+        }
 
         #endregion
 

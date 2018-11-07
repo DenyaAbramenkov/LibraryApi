@@ -1,7 +1,6 @@
 ﻿using LibraryApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
@@ -21,7 +20,6 @@ namespace LibraryApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ILibrary, Library>();
-            services.AddTransient<IDataProvider, DataProvider>();
             services.AddMvc();
             services.AddSwaggerGen(c =>
             {
@@ -34,8 +32,7 @@ namespace LibraryApi
             });
 
             var connection = @"Data Source=DESKTOP-689S6T3\SERVER;Initial Catalog=LibraryDb;Integrated Security=True";
-            services.AddDbContext<LibraryModelDbContext>(options => options.UseSqlServer(connection));
-
+            services.AddDbContext<ILibraryModelDbContext>(options => options.UseSqlServer(connection));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILibrary library)

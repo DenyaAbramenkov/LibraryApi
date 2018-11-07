@@ -2,7 +2,6 @@
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using Microsoft.EntityFrameworkCore;
 
 
     /// <summary>
@@ -11,12 +10,6 @@
     [Table("Authors")]
     public class Author
     {
-        /// <summary>
-        /// Private counter for getting new Id of author.
-        /// </summary>
-        private static int _counterForId = 0;
-
-
         /// <summary>
         /// Gets the Author's Id.
         /// </summary>
@@ -45,17 +38,17 @@
         /// </summary>
         /// <param name="genre">Author to compare.</param>
         /// <returns>Result of comparattion.</returns>
-        public override bool Equals(object author)
-        {
-            Author newAuthor = author as Author;
-            if (this.Name == newAuthor.Name
-             && this.Surname == newAuthor.Surname
-             && this.YearOfBirthday == newAuthor.YearOfBirthday)
-            {
-                return true;
-            }
+        //public override bool Equals(object author)
+        //{
+        //    Author newAuthor = author as Author;
+        //    if (this.Name == newAuthor.Name
+        //     && this.Surname == newAuthor.Surname
+        //     && this.YearOfBirthday == newAuthor.YearOfBirthday)
+        //    {
+        //        return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
     }
 }

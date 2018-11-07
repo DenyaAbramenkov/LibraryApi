@@ -51,7 +51,7 @@ namespace LibraryApi.Controllers
         [HttpGet("{id}", Name = "GetGenre")]
         public IActionResult GetGenre(int id)
         {
-            var item = _library.GetAllGenres().ToList().Find((Genre) => Genre.Id == id);
+            var item = _library.GetAllGenres();
             if (item == null)
             {
                 return NotFound();
